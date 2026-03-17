@@ -420,6 +420,8 @@ function CryptoList({ items }: { items: CryptoData[] }) {
                 <Image
                   src={crypto.image}
                   alt={crypto.symbol}
+                  width={32}
+                  height={32}
                   className="w-full h-full object-cover"
                 />
               </motion.div>
@@ -630,7 +632,7 @@ function CryptoTableRow({
 const carouselItems = [
   {
     src: "/backpack-smoke copy.webp",
-    title: "US Election Prediction Markets",
+    title: "US Election Prediction Market",
     description: "Predict the outcome by trading the outcome tokens.",
     buttons: [{ text: "Manage Referrals", link: "#" }],
   },
@@ -722,9 +724,8 @@ function Carousel() {
           <Image
             src={currentItem.src}
             alt="Background"
-            layout="fill"
-            objectFit="cover"
-            className="opacity-70"
+            fill
+            className="opacity-70 object-cover"
           />
         </motion.div>
       </AnimatePresence>

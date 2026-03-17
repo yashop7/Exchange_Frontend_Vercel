@@ -41,7 +41,7 @@ export function SwapUI({ market , balance , inr }: { market: string , balance: s
                     <div className="border-baseBorderLight border-2 border-solid flex items-center justify-between p-3 rounded-lg bg-transparent">
                       <span className="text-sm text-muted-foreground">
                         <div className="relative">
-                          <Image src="/usdc copy.webp" alt="USDC Logo" className="w-6 h-6" />
+                          <Image src="/usdc copy.webp" alt="USDC Logo" width={24} height={24} className="w-6 h-6" />
                         </div>
                       </span>
                       <span className="">
@@ -54,6 +54,8 @@ export function SwapUI({ market , balance , inr }: { market: string , balance: s
                           <Image
                           alt="TATA Logo"
                             src="/TATA.png"
+                            width={28}
+                            height={28}
                             className="size-7 rounded-full"
                           />
                         </div>
@@ -117,7 +119,7 @@ export function SwapUI({ market , balance , inr }: { market: string , balance: s
                 />
                 <div className="flex flex-row absolute right-1 top-1 p-2">
                   <div className="relative">
-                    <Image src="/TATA.png" alt="TATA Logo" className="w-6 h-6" />
+                    <Image src="/TATA.png" alt="TATA Logo" width={24} height={24} className="w-6 h-6" />
                   </div>
                 </div>
               </div>
@@ -160,7 +162,7 @@ export function SwapUI({ market , balance , inr }: { market: string , balance: s
                 />
                 <div className="flex flex-row absolute right-1 top-1 p-2">
                   <div className="relative">
-                    <Image src="/usdc copy.webp" alt="TATA Logo" className="w-6 h-6" />
+                    <Image src="/usdc copy.webp" alt="TATA Logo" width={24} height={24} className="w-6 h-6" />
                   </div>
                 </div>
               </div>

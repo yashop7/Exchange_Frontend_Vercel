@@ -64,7 +64,7 @@ export function OrderTable({ openOrders }: { openOrders: Order[] }) {
                     className="border-b border-gray-700 cursor-pointer"
                   >
                     <td className="px-6 py-4 flex items-center gap-2">
-                      <Image src="/TATA.png" alt="coin" className="w-6 h-6 rounded-full" />
+                      <Image src="/TATA.png" alt="coin" width={24} height={24} className="w-6 h-6 rounded-full" />
                     </td>
                     <td className="px-6 py-4 font-medium">{order.price}</td>
                     <td className="px-6 py-4">{order.quantity}</td>
@@ -116,7 +116,7 @@ export function OrderTable({ openOrders }: { openOrders: Order[] }) {
                     className="border-b border-gray-700 cursor-pointer"
                   >
                     <td className="px-6 py-4 flex items-center gap-2">
-                      <Image src="/TATA.png" alt="coin" className="w-6 h-6 rounded-full" />
+                      <Image src="/TATA.png" alt="coin" width={24} height={24} className="w-6 h-6 rounded-full" />
                     </td>
                     <td className="px-6 py-4 font-medium">{order.price}</td>
                     <td className="px-6 py-4">{order.quantity}</td>
