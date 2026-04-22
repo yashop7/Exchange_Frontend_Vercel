@@ -1,18 +1,21 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    images: {
-      domains: ['coin-images.coingecko.com'], // Add external domains for images here
-    },
-      async rewrites() {
-        return [
-          {
-            source: '/api/tickers',  // When calling this path in your frontend
-            destination: 'https://api.backpack.exchange/api/v1/tickers',  // It will proxy the request to this API
-          },
-        ];
+  images: {
+    domains: ['coin-images.coingecko.com'],
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/api/tickers',
+        destination: 'https://api.backpack.exchange/api/v1/tickers',
       },
-      reactStrictMode: false, // Disable strict mode to prevent double rendering
-    };
-    
-    export default nextConfig;
-    
+      {
+        source: '/api/engine/:path*',
+        destination: `${process.env.API_BASE_URL}/:path*`,
+      },
+    ];
+  },
+  reactStrictMode: false,
+};
+
+export default nextConfig;

@@ -30,10 +30,7 @@ export default function Page() {
     async function fetchBalance() {
       try {
         const response = await axios.get(`${BASE_URL}/order/balance`, {
-          params: {
-            userId: "1",
-            market: "TATA_INR",
-          },
+          params: { userId: "1", market: "TATA_INR" },
         });
         setOpenOrders(response.data.openOrders);
         setBalance(response.data.balance);
@@ -43,45 +40,38 @@ export default function Page() {
       }
     }
     fetchBalance();
-    setInterval(() => {
-      fetchBalance();
-    }, 1000 * 10);
+    setInterval(() => { fetchBalance(); }, 1000 * 10);
   }, []);
 
   return (
-    <div className="flex flex-col font-inter lg:flex-row w-full h-full">
-      <div className="flex flex-col lg:w-3/4 h-full">
-        {/* MarketBar at the top */}
-        <div className="w-full">
-          <MarketBar market={market as string} />
-        </div>
+    <div className="relative flex flex-col lg:flex-row w-full min-h-[calc(100vh-56px)] bg-black overflow-hidden">
+      {/* Main column */}
+      <div className="flex flex-col flex-1 min-w-0">
+        {/* Ticker */}
+        <MarketBar market={market as string} />
 
-        <div className="flex flex-col lg:flex-row w-full h-full">
-          {/* Left half for TradeView */}
-          <div className="lg:w-2/3 flex flex-col">
+        {/* Chart + Depth row */}
+        <div className="flex flex-col lg:flex-row flex-1 min-h-0">
+          {/* Chart */}
+          <div className="flex-1 min-w-0 border-b lg:border-b-0 lg:border-r border-white/10">
             <TradeView market={market as string} />
           </div>
 
-          <div className="border-t lg:border-t-0 lg:border-l border-neutral-800" />
-
-          {/* Right half split between Depth and SwapUI */}
-          <div className="lg:w-1/3 flex flex-col lg:flex-row h-full">
-            <div
-              className="flex-1 p-1 overflow-auto no-scrollbar"
-              style={{ maxHeight: "75vh" }}
-            >
-              <Depth market={market as string} />
-            </div>
-            <div className="border-t lg:border-t-0 lg:border-l border-neutral-800" />
+          {/* Order book */}
+          <div
+            className="w-full lg:w-[260px] shrink-0 border-b lg:border-b-0 border-white/10 overflow-hidden"
+            style={{ maxHeight: "calc(100vh - 56px - 56px)" }}
+          >
+            <Depth market={market as string} />
           </div>
         </div>
-        <div>
-          <OrderTable openOrders={openOrders} />
-        </div>
+
+        {/* Open orders */}
+        <OrderTable openOrders={openOrders} />
       </div>
 
-      {/* SwapUI at the bottom on mobile, right on larger screens */}
-      <div className="lg:w-1/4 overflow-auto lg:order-none order-last">
+      {/* Swap panel */}
+      <div className="w-full lg:w-[300px] shrink-0 border-t lg:border-t-0 lg:border-l border-white/10 overflow-y-auto no-scrollbar">
         <SwapUI market={market as string} balance={balance} inr={inr} />
       </div>
     </div>

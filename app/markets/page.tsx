@@ -1,23 +1,27 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
 import {
   ColorType,
   createChart,
   IChartApi,
   UTCTimestamp,
 } from "lightweight-charts";
+
 import {
-  ChevronLeft,
-  ChevronRight,
+  ArrowRight,
+  ArrowUpRight,
+  Flame,
+  Sparkles,
+  Star,
   TrendingDown,
   TrendingUp,
+  Zap,
 } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { motion } from "framer-motion";
 import { CombineData, CombinedCryptoData } from "../utils/combine-data";
 import { Skeleton } from "@/components/ui/skeleton";
-import { get } from "http";
 
 export interface CurrencyData {
   price: number;
@@ -47,12 +51,12 @@ export interface CryptoData {
   max_supply: number;
   ath: number;
   ath_change_percentage: number;
-  ath_date: string; // Use Date if you parse it as a Date object
+  ath_date: string;
   atl: number;
   atl_change_percentage: number;
-  atl_date: string; // Use Date if you parse it as a Date object
+  atl_date: string;
   roi: null | number;
-  last_updated: string; // Use Date if you parse it as a Date object
+  last_updated: string;
   price_change_percentage_24h_in_currency: number;
   currencies: {
     cad: CurrencyData;
@@ -66,7 +70,7 @@ export interface CryptoData {
 
 export interface LineCryptoDataPoint {
   close: string;
-  end: string; //THIS IS TIME
+  end: string;
 }
 
 export interface LineCryptoData {
@@ -77,7 +81,6 @@ export interface LineCryptoData {
 export default function Component() {
   const [data, setData] = useState<CombinedCryptoData[] | null>(null);
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -87,378 +90,283 @@ export default function Component() {
         console.error("Error fetching data:", error);
       }
     };
-    // Initial fetch
     fetchData();
-    // Poll every 10 seconds
     const interval = setInterval(fetchData, 30000);
-
-    return () => {
-      clearInterval(interval);
-    };
+    return () => clearInterval(interval);
   }, []);
 
   if (!data) {
     return (
-      <div className="bg-[#121212] text-white min-h-screen p-4 tracking-widest">
-          <div className="max-w-7xl mx-auto">
-              {/* Carousel Skeleton */}
-              <div className="relative bg-blue-900/10 rounded-xl w-full  overflow-hidden mb-6 h-80">
-                  <div className="p-8 space-y-4  absolute  bottom-1">
-                      <Skeleton className="h-10 w-full bg-neutral-700" />
-                      <Skeleton className="h-6 w-1/2 bg-neutral-700" />
-                      <div className="flex space-x-4">
-                          <Skeleton className="h-10 w-32 rounded-lg bg-neutral-700" />
-                          <Skeleton className="h-10 w-32 rounded-lg bg-neutral-700" />
-                      </div>
-                  </div>
-              </div>
-
-              {/* Three Column Grid Skeleton */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                  {[1, 2, 3].map((index) => (
-                      <div key={index} className="bg-blue-900/10 p-4 rounded-xl">
-                          <Skeleton className="h-8 w-32 mb-4 bg-neutral-700" />
-                          <div className="space-y-4">
-                              {[1, 2, 3, 4, 5].map((item) => (
-                                  <div key={item} className="flex items-center justify-between p-2">
-                                      <div className="flex items-center gap-3">
-                                          <Skeleton className="h-8 w-8 rounded-full bg-neutral-700" />
-                                          <div className="space-y-2">
-                                              <Skeleton className="h-4 w-24 bg-neutral-700" />
-                                              <Skeleton className="h-3 w-16 bg-neutral-700" />
-                                          </div>
-                                      </div>
-                                      <div className="space-y-2">
-                                          <Skeleton className="h-4 w-20 bg-neutral-700" />
-                                          <Skeleton className="h-3 w-16 bg-neutral-700" />
-                                      </div>
-                                  </div>
-                              ))}
-                          </div>
-                      </div>
-                  ))}
-              </div>
-
-              {/* Table Skeleton */}
-              <div className="bg-blue-900/10 p-4 rounded-xl">
-                  <div className="flex space-x-4 mb-4">
-                      <Skeleton className="h-8 w-20 bg-neutral-700" />
-                      <Skeleton className="h-8 w-20 bg-neutral-700" />
-                  </div>
-                  <div className="space-y-4">
-                      {/* Table Header */}
-                      <div className="grid grid-cols-6 gap-4 pb-4 border-b border-neutral-800">
-                          {[1, 2, 3, 4, 5, 6].map((item) => (
-                              <Skeleton key={item} className="h-6 bg-neutral-700" />
-                          ))}
-                      </div>
-                      {/* Table Rows */}
-                      {[1, 2, 3, 4, 5].map((row) => (
-                          <div key={row} className="grid grid-cols-6 gap-4 py-4">
-                              <div className="flex items-center gap-3">
-                                  <Skeleton className="h-12 w-12 rounded-full bg-neutral-700" />
-                                  <div className="space-y-2">
-                                      <Skeleton className="h-4 w-24 bg-neutral-700" />
-                                      <Skeleton className="h-3 w-16 bg-neutral-700" />
-                                  </div>
-                              </div>
-                              {[1, 2, 3, 4, 5].map((col) => (
-                                  <Skeleton key={col} className="h-6 bg-neutral-700" />
-                              ))}
-                          </div>
-                      ))}
-                  </div>
-              </div>
+      <div className="text-white min-h-screen p-6 md:p-10 bg-black">
+        <div className="max-w-7xl mx-auto space-y-6">
+          <div className="rounded-xl border border-white/10 bg-[#0a0a0a] h-[280px] p-10 flex flex-col justify-end space-y-4">
+            <Skeleton className="h-10 w-64 bg-white/[0.06]" />
+            <Skeleton className="h-5 w-96 bg-white/[0.04]" />
+            <div className="flex gap-3 pt-1">
+              <Skeleton className="h-9 w-28 rounded-md bg-white/[0.06]" />
+              <Skeleton className="h-9 w-28 rounded-md bg-white/[0.04]" />
+            </div>
           </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {[1,2,3,4].map((i) => (
+              <div key={i} className="rounded-xl border border-white/10 bg-[#0a0a0a] p-5 space-y-2">
+                <Skeleton className="h-3 w-20 bg-white/[0.06]" />
+                <Skeleton className="h-6 w-24 bg-white/[0.04]" />
+              </div>
+            ))}
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[1,2,3].map((i) => (
+              <div key={i} className="rounded-xl border border-white/10 bg-[#0a0a0a] p-5 space-y-4">
+                <Skeleton className="h-4 w-24 bg-white/[0.06]" />
+                {[1,2,3,4,5].map((j) => (
+                  <div key={j} className="flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <Skeleton className="h-7 w-7 rounded-full bg-white/[0.06]" />
+                      <Skeleton className="h-4 w-16 bg-white/[0.04]" />
+                    </div>
+                    <Skeleton className="h-4 w-14 bg-white/[0.04]" />
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+          <div className="rounded-xl border border-white/10 bg-[#0a0a0a] p-5 space-y-4">
+            {[1,2,3,4,5].map((i) => (
+              <div key={i} className="flex items-center gap-4 py-2 border-b border-white/[0.06]">
+                <Skeleton className="h-9 w-9 rounded-full bg-white/[0.06]" />
+                <div className="flex-1 flex items-center justify-between">
+                  <Skeleton className="h-4 w-24 bg-white/[0.04]" />
+                  <Skeleton className="h-4 w-20 bg-white/[0.04]" />
+                  <Skeleton className="h-4 w-20 bg-white/[0.04]" />
+                  <Skeleton className="h-5 w-14 rounded bg-white/[0.04]" />
+                  <Skeleton className="h-8 w-24 bg-white/[0.04]" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
-  )
-  };
+    );
+  }
 
-  const getNewListings = (data: CryptoData[]): CryptoData[] => {
-    return data
-      .sort((a, b) => 
-        new Date(b.last_updated).getTime() - new Date(a.last_updated).getTime()
-      )
-      .slice(0, 5);
-  };
-  
-  // Function to get top gainers (middle panel)
-  const getTopGainers = (data: CryptoData[]): CryptoData[] => {
-    return data
-      .filter(coin => !Number.isNaN(coin.price_change_percentage_24h))
+  const getNewListings = (data: CryptoData[]): CryptoData[] =>
+    data.sort((a, b) => new Date(b.last_updated).getTime() - new Date(a.last_updated).getTime()).slice(0, 5);
+
+  const getTopGainers = (data: CryptoData[]): CryptoData[] =>
+    data.filter((coin) => !Number.isNaN(coin.price_change_percentage_24h))
       .sort((a, b) => b.price_change_percentage_24h - a.price_change_percentage_24h)
       .slice(0, 5);
-  };
-  
-  // Function to get popular coins (right panel)
+
   const getPopularCoins = (data: CryptoData[]): CryptoData[] => {
-    // Based on the image, we should prioritize major coins like BTC, ETH, SOL
-    const popularSymbols = ['SOL', 'ETH', 'BTC', 'WEN', 'DRIFT'];
-    
+    const popularSymbols = ["SOL", "ETH", "BTC", "WEN", "DRIFT"];
     return data
-      .filter(coin => popularSymbols.includes(coin.symbol.toUpperCase()))
-      .sort((a, b) => {
-        const aIndex = popularSymbols.indexOf(a.symbol.toUpperCase());
-        const bIndex = popularSymbols.indexOf(b.symbol.toUpperCase());
-        return aIndex - bIndex;
-      });
+      .filter((coin) => popularSymbols.includes(coin.symbol.toUpperCase()))
+      .sort((a, b) => popularSymbols.indexOf(a.symbol.toUpperCase()) - popularSymbols.indexOf(b.symbol.toUpperCase()));
   };
-  
-  
-  
 
-  // Sorting for most popular based on market cap rank (descending)
   const mostPopular = getPopularCoins(data);
-
-  // Sorting for top gainer based on 24h price change percentage (descending)
   const topGainer = getTopGainers(data);
-
-  // Finding newest entry based on `last_updated` (you may also use createdAt if available)
   const newEntries = getNewListings(data);
 
+  const panels = [
+    { label: "New listings", icon: <Sparkles className="w-3.5 h-3.5" />, items: newEntries },
+    { label: "Top gainers",  icon: <Flame className="w-3.5 h-3.5" />,    items: topGainer },
+    { label: "Popular",      icon: <Star className="w-3.5 h-3.5" />,     items: mostPopular },
+  ];
+
   return (
-    <div className="bg-[#121212] font-inter text-white min-h-screen p-4 tracking-widest">
-      <div className="max-w-7xl mx-auto">
-        {/* <div className="relative bg-[#1c1c1c] rounded-xl overflow-hidden mb-6 pt-32">
-          <div className="absolute inset-0">
-            <Image
-              src="/backpack-smoke.webp"
-              alt="Background"
-              layout="fill"
-              objectFit="cover"
-              className="opacity-50"
-            />
-          </div>
-          <div className="relative p-8">
-            <div className="flex justify-between items-center mb-4">
-              <ChevronLeft className="text-neutral-400  cursor-pointer" />
-              <ChevronRight className="text-neutral-400 cursor-pointer" />
+    <div className="text-white min-h-screen p-6 md:p-10 bg-black">
+      <div className="max-w-7xl mx-auto space-y-4">
+
+        {/* HERO */}
+        <div className="relative rounded-xl border border-white/10 bg-[#0a0a0a] overflow-hidden">
+          {/* Dot grid pattern */}
+          <div
+            className="absolute inset-0 opacity-[0.15]"
+            style={{
+              backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.35) 1px, transparent 1px)",
+              backgroundSize: "28px 28px",
+            }}
+          />
+          {/* Fade mask over dots */}
+          <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, #0a0a0a 30%, rgba(10,10,10,0.6) 70%, rgba(10,10,10,0.2) 100%)" }} />
+
+          <div className="relative px-10 py-14 md:py-16 max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 text-[10px] font-medium text-white/50 uppercase tracking-widest mb-6">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#22c55e] shrink-0" />
+              Live markets
             </div>
-            <h1 className="text-4xl font-bold mb-2">
-              US Election Prediction Markets
+            <h1 className="text-4xl md:text-5xl font-bold text-white leading-[1.1] mb-4 tracking-tight">
+              Trade crypto,<br />without limits.
             </h1>
-            <p className="text-neutral-400 mb-4">
-              Predict the outcome by trading the outcome tokens.
+            <p className="text-base text-white/50 mb-8 leading-relaxed max-w-md">
+              Real-time order books, limit &amp; market orders, deep liquidity.
+              Built for traders who demand precision.
             </p>
-            <div className="flex space-x-4">
-              <button className="bg-white text-black px-4 py-2 rounded-full font-semibold">
-                Trade TRUMPWIN
-              </button>
-              <button className="bg-white text-black px-4 py-2 rounded-full font-semibold">
-                Trade HARRISWIN
-              </button>
-            </div>
-            <div className="flex justify-center mt-4 space-x-2">
-              <div className="w-2 h-2 bg-white rounded-full"></div>
-              <div className="w-2 h-2 bg-neutral-600 rounded-full"></div>
-              <div className="w-2 h-2 bg-neutral-600 rounded-full"></div>
-              <div className="w-2 h-2 bg-neutral-600 rounded-full"></div>
-            </div>
-          </div>
-        </div> */}
-        <Carousel />
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <motion.div 
-            className="bg-neutral-900/50 cursor-pointer  p-6 rounded-xl flex items-center gap-6 "
-            transition={{ duration: 0.2 }}
-            onClick={() => window.location.href = "/trade/TATA_INR"}
-          >
-            <div className="p-4 bg-purple-500/10 rounded-full">
-              <div className="relative">
-          <TrendingUp className="w-8 h-8 text-purple-500" />
-          <motion.div 
-            className="absolute -top-2 -right-2 w-4 h-4 bg-green-500 rounded-full"
-            animate={{ scale: [1, 1.2, 1] }}
-            transition={{ repeat: Infinity, duration: 2 }}
-          />
-              </div>
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-          <h3 className="text-xl font-semibold mb-1">TATA/INR Market</h3>
-          <span className="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded-full">HOT</span>
-              </div>
-              <p className="text-neutral-400">Trading at ₹500 • Volume: ₹1.2M</p>
-              <div className="flex items-center gap-2 mt-1">
-          <span className="text-green-500">+12.5%</span>
-          <span className="text-xs text-neutral-400">(24h)</span>
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div 
-            className="bg-neutral-900/50 cursor-pointer  p-6 rounded-xl flex items-center gap-6"
-            transition={{ duration: 0.2 }}
-            onClick={() => window.location.href = "/trade/TATA_INR"}
-          >
-            <div className="p-4 bg-blue-500/10 rounded-full">
-              <svg 
-          className="w-8 h-8 text-blue-500"
-          fill="none" 
-          stroke="currentColor" 
-          viewBox="0 0 24 24"
+            <div className="flex items-center gap-3">
+              <a
+                href="/trade/TATA_INR"
+                className="inline-flex items-center gap-1.5 bg-white text-black text-sm font-semibold px-5 py-2.5 rounded-md hover:bg-white/90 transition-colors"
               >
-          <path 
-            strokeLinecap="round" 
-            strokeLinejoin="round" 
-            strokeWidth={2} 
-            d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-          />
-              </svg>
+                Start trading <ArrowRight className="w-4 h-4" />
+              </a>
+              <a
+                href="#markets"
+                className="inline-flex items-center gap-1.5 border border-white/15 text-white text-sm font-medium px-5 py-2.5 rounded-md hover:bg-white/5 hover:border-white/25 transition-colors"
+              >
+                View markets
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* ── STATS STRIP ──────────────────────────────────────────── */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {[
+            { label: "24h Volume",     value: "$84.2B",  delta: "+6.4%",  up: true  },
+            { label: "Market Cap",     value: "$2.41T",  delta: "+2.1%",  up: true  },
+            { label: "Active Markets", value: "1,248",   delta: "Live",   up: true  },
+            { label: "BTC Dominance",  value: "52.3%",   delta: "-0.4%",  up: false },
+          ].map(({ label, value, delta, up }) => (
+            <div key={label} className="rounded-xl border border-white/10 bg-[#0a0a0a] px-5 py-4">
+              <p className="text-[9px] font-medium uppercase tracking-widest text-white/30 mb-1.5">{label}</p>
+              <p className="font-mono text-lg font-semibold text-white tabular-nums">{value}</p>
+              <p className={`font-mono text-[10px] mt-0.5 ${up ? "text-[#22c55e]" : "text-[#ef4444]"}`}>{delta}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* ── FEATURED CARD ─────────────────────────────────────────── */}
+        <div
+          className="rounded-xl border border-white/10 bg-[#0a0a0a] px-6 py-5 flex items-center justify-between cursor-pointer hover:bg-white/[0.03] transition-colors group"
+          onClick={() => (window.location.href = "/trade/TATA_INR")}
+        >
+          <div className="flex items-center gap-4">
+            <div className="p-3 rounded-lg border border-white/10 bg-white/[0.04]">
+              <TrendingUp className="w-5 h-5 text-white/60" />
             </div>
             <div>
-              <h3 className="text-xl font-semibold mb-1">Market Overview</h3>
-              <p className="text-neutral-400">TATA/INR leads with highest volume</p>
-              <div className="mt-1 text-xs text-neutral-400">
-          Updated 2 mins ago
+              <div className="flex items-center gap-2 mb-0.5">
+                <span className="text-sm font-semibold text-white">TATA / INR</span>
+                <span className="px-2 py-0.5 rounded-full text-[9px] font-bold tracking-widest uppercase text-[#22c55e] bg-[#22c55e]/10 ring-1 ring-[#22c55e]/20">Live</span>
+              </div>
+              <p className="text-xs text-white/40">₹500 · Vol ₹1.2M · Active market</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-6">
+            <div className="text-right hidden sm:block">
+              <p className="text-[9px] font-medium uppercase tracking-widest text-white/30 mb-1">24h Change</p>
+              <p className="font-mono text-base font-semibold text-[#22c55e] tabular-nums">+12.5%</p>
+            </div>
+            <div className="flex items-center gap-1.5 bg-white text-black px-4 py-2 rounded-md text-sm font-semibold group-hover:bg-white/90 transition-colors">
+              Trade <ArrowUpRight className="w-3.5 h-3.5" />
+            </div>
+          </div>
+        </div>
+
+        {/* ── THREE-PANEL GRID ──────────────────────────────────────── */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4" id="markets">
+          {panels.map(({ label, icon, items }) => (
+            <div key={label} className="rounded-xl border border-white/10 bg-[#0a0a0a] overflow-hidden">
+              <div className="flex items-center justify-between px-5 pt-5 pb-3">
+                <div className="flex items-center gap-2 text-white/70">
+                  {icon}
+                  <span className="text-xs font-semibold">{label}</span>
+                </div>
+                <span className="text-[9px] font-medium uppercase tracking-widest text-white/25 cursor-pointer hover:text-white/50 transition-colors">
+                  All →
+                </span>
+              </div>
+              <div className="h-px mx-5 bg-white/[0.07]" />
+              <div className="p-3">
+                <CryptoList items={items} />
               </div>
             </div>
-          </motion.div>
+          ))}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-blue-900/10  p-4 rounded-xl">
-            <h2 className="text-xl font-semibold mb-4">New</h2>
-            <CryptoList items={newEntries} />
-          </div>
-
-          <div className="bg-blue-900/10  p-4 rounded-xl">
-            <h2 className="text-xl font-semibold mb-4">Top Gainers</h2>
-            <CryptoList items={topGainer} />
-          </div>
-
-          <div className="bg-blue-900/10  p-4 rounded-xl">
-            <h2 className="text-xl font-semibold mb-4">Popular</h2>
-            <CryptoList items={mostPopular} />
-          </div>
-        </div>
-
-        <div className="bg-neutral-900/10 p-4 rounded-xl">
-            <div className="flex space-x-4 mb-4">
-            <motion.button
-              className="px-4 py-2 text-white bg-neutral-800/50 rounded-lg font-medium border border-neutral-700"
-              whileHover={{ 
-              scale: 1.05,
-              backgroundColor: "rgba(255,255,255,0.1)",
-              transition: { duration: 0.2 }
-              }}
-              whileTap={{ scale: 0.95 }}
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              Spot
-            </motion.button>
-            <motion.button
-              className="px-4 py-2 text-neutral-400 rounded-lg font-medium hover:text-white"
-              whileHover={{ 
-              scale: 1.05,
-              backgroundColor: "rgba(255,255,255,0.05)",
-              transition: { duration: 0.2 }
-              }}
-              whileTap={{ scale: 0.95 }}
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.1 }}
-            >
-              Favorites
-            </motion.button>
+        {/* ── MAIN TABLE ────────────────────────────────────────────── */}
+        <div className="rounded-xl border border-white/10 bg-[#0a0a0a] overflow-hidden">
+          <div className="flex items-center justify-between px-6 pt-5 pb-4">
+            <div className="flex items-center gap-2 text-white/70">
+              <Zap className="w-3.5 h-3.5" />
+              <span className="text-xs font-semibold">All markets</span>
             </div>
+            <div className="flex items-center gap-2">
+              <button className="px-3.5 py-1.5 rounded-md text-[11px] font-semibold text-white bg-white/10 border border-white/15 transition-colors">
+                Spot
+              </button>
+              <button className="px-3.5 py-1.5 rounded-md text-[11px] font-medium text-white/40 border border-white/10 hover:text-white/70 hover:border-white/15 transition-colors">
+                Favorites
+              </button>
+            </div>
+          </div>
           <CryptoTable data={data} />
         </div>
+
       </div>
     </div>
   );
 }
 
-// lib/utils.ts
-const formatCurrency = (value: number) => {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(value);
-};
+// ── UTILS ──────────────────────────────────────────────────────────────────────
 
-const formatPercentage = (value: number) => {
-  return new Intl.NumberFormat("en-US", {
-    style: "percent",
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(value / 100);
-};
+const formatCurrency = (value: number) =>
+  new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(value);
+
+const formatPercentage = (value: number) =>
+  new Intl.NumberFormat("en-US", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value / 100);
+
+function formatNumber(value: number) {
+  if (value >= 1e12) return (value / 1e12).toFixed(2) + "T";
+  if (value >= 1e9)  return (value / 1e9).toFixed(2) + "B";
+  if (value >= 1e6)  return (value / 1e6).toFixed(2) + "M";
+  if (value >= 1e3)  return (value / 1e3).toFixed(2) + "K";
+  return value;
+}
+
+// CRYPTO LIST
 
 function CryptoList({ items }: { items: CryptoData[] }) {
   return (
-    <motion.ul className="space-y-2 tracking-wider">
-      {items.map((crypto, index) => (
-        <motion.li
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ 
-            duration: 0.3,
-            delay: index * 0.1,
-            ease: "easeOut"
-          }}
-          whileHover={{ 
-            scale: 1.02,
-            backgroundColor: "rgba(255, 255, 255, 0.05)"
-          }}
-          whileTap={{ scale: 0.98 }}
-          onClick={() =>
-            (window.location.href = `/trade/${crypto.symbol.toUpperCase()}_USDC`)
-          }
-          key={crypto.id}
-          className="py-1 cursor-pointer rounded-lg transition-colors"
-        >
-          <div className="flex items-center justify-between px-4">
-            <motion.div className="flex items-center gap-3">
-              <motion.div 
-                className="w-8 h-8 overflow-hidden rounded-full"
-                whileHover={{ scale: 1.1 }}
-              >
-                <Image
-                  src={crypto.image}
-                  alt={crypto.symbol}
-                  width={32}
-                  height={32}
-                  className="w-full h-full object-cover"
-                />
-              </motion.div>
+    <ul className="space-y-0.5">
+      {items.map((crypto, index) => {
+        const up = crypto.price_change_percentage_24h >= 0;
+        return (
+          <motion.li
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2, delay: index * 0.04 }}
+            whileHover={{ backgroundColor: "rgba(255,255,255,0.03)" }}
+            onClick={() => (window.location.href = `/trade/${crypto.symbol.toUpperCase()}_USDC`)}
+            key={crypto.id}
+            className="flex items-center justify-between px-3 py-2.5 rounded-lg cursor-pointer transition-colors"
+          >
+            <div className="flex items-center gap-2.5">
+              <div className="w-7 h-7 rounded-full overflow-hidden ring-1 ring-white/10 shrink-0">
+                <Image src={crypto.image} alt={crypto.symbol} width={28} height={28} className="w-full h-full object-cover" />
+              </div>
               <div>
-                <h3 className="font-medium uppercase">{crypto.symbol}</h3>
+                <p className="text-xs font-semibold uppercase text-white/90">{crypto.symbol}</p>
+                <p className="text-[10px] text-white/30 truncate max-w-[80px]">{crypto.name}</p>
               </div>
-            </motion.div>
-
-            <motion.div className="flex items-center gap-6">
-              <div className="text-right">
-              <div className="font-medium">
-                {formatCurrency(crypto.current_price)}
-              </div>
-              <motion.div
-                initial={{ scale: 0.9 }}
-                animate={{ scale: 1 }}
-                className={`flex justify-end gap-1 text-sm ${
-                crypto.price_change_percentage_24h >= 0
-                  ? "text-green-600"
-                  : "text-red-600"
-                }`}
-              >
-                {crypto.price_change_percentage_24h >= 0 ? (
-                <TrendingUp className="w-4 h-4" />
-                ) : (
-                <TrendingDown className="w-4 h-4" />
-                )}
+            </div>
+            <div className="text-right">
+              <p className="font-mono text-xs font-medium text-white tabular-nums">{formatCurrency(crypto.current_price)}</p>
+              <p className={`flex items-center justify-end gap-0.5 font-mono text-[10px] mt-0.5 ${up ? "text-[#22c55e]" : "text-[#ef4444]"}`}>
+                {up ? <TrendingUp className="w-2.5 h-2.5" /> : <TrendingDown className="w-2.5 h-2.5" />}
                 {formatPercentage(crypto.price_change_percentage_24h)}
-              </motion.div>
-              </div>
-            </motion.div>
-          </div>
-        </motion.li>
-      ))}
-    </motion.ul>
+              </p>
+            </div>
+          </motion.li>
+        );
+      })}
+    </ul>
   );
 }
+
+// ── CRYPTO TABLE ──────────────────────────────────────────────────────────────
 
 interface CryptoTableRowProps {
   name: string;
@@ -473,429 +381,129 @@ interface CryptoTableRowProps {
 
 function CryptoTable({ data }: { data: CombinedCryptoData[] | null }) {
   if (!data) return null;
-  return (
-    <table className="w-full">
-      <thead>
-        <tr className="text-neutral-400 text-md border-b border-neutral-800">
-          <th className="text-left pl-4  font-normal  tracking-wide pb-4">
-            Name
-          </th>
-          <th className="text-right font-normal  tracking-wide pb-4">Price</th>
-          <th className="text-right font-normal  tracking-wide pb-4">
-            ↓Market Cap
-          </th>
-          <th className="text-right font-normal  tracking-wide pb-4">
-            24h Volume
-          </th>
-          <th className="text-right font-normal  tracking-wide pb-4">
-            24h Change
-          </th>
-          <th className="text-right font-normal  tracking-wide pb-4">
-            Last 7 Days
-          </th>
-        </tr>
-      </thead>
-      <tbody className="">
-        {data
-          ?.sort((a, b) => b.market_cap - a.market_cap)
-          .slice(0, -5)
-          .filter((item) => !item.symbol.toLowerCase().includes("usdc"))
-          .map((item, index) => {
-            //Now we have to Take each Item and Match the data from the Table and then
-            // const data = dataKlines?.find((data) => data.symbol === item.symbol);
-            // if (!data) return null;
+  const rows = data
+    .sort((a, b) => b.market_cap - a.market_cap)
+    .slice(0, -5)
+    .filter((item) => !item.symbol.toLowerCase().includes("usdc"));
 
-            return (
-              <CryptoTableRow
-                key={index}
-                image={item.image}
-                name={item.name}
-                symbol={item.symbol}
-                price={item.current_price}
-                marketCap={item.market_cap}
-                volume={item.total_volume}
-                change={item.price_change_percentage_24h}
-                klineData={item.KlineData}
-              />
-            );
-          })}
-      </tbody>
-    </table>
+  return (
+    <div className="overflow-x-auto no-scrollbar">
+      <table className="w-full min-w-[640px]">
+        <thead>
+          <tr className="border-b border-white/[0.07]">
+            {["Name", "Price", "Market Cap", "24h Volume", "24h Change", "7 Days"].map((h, i) => (
+              <th key={h} className={`px-5 py-3 text-[9px] font-semibold uppercase tracking-[0.14em] text-white/28 ${i <= 1 ? "text-left" : "text-right"}`}>
+                {h}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((item, index) => (
+            <CryptoTableRow
+              key={index}
+              image={item.image}
+              name={item.name}
+              symbol={item.symbol}
+              price={item.current_price}
+              marketCap={item.market_cap}
+              volume={item.total_volume}
+              change={item.price_change_percentage_24h}
+              klineData={item.KlineData}
+            />
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 
-function CryptoTableRow({
-  name,
-  image,
-  symbol,
-  price,
-  marketCap,
-  volume,
-  change,
-  klineData,
-}: CryptoTableRowProps) {
-  function formatNumber(value: number) {
-    if (value >= 1e12) {
-      return (value / 1e12).toFixed(2) + "T";
-    } else if (value >= 1e9) {
-      return (value / 1e9).toFixed(2) + "B";
-    } else if (value >= 1e6) {
-      return (value / 1e6).toFixed(2) + "M";
-    } else if (value >= 1e3) {
-      return (value / 1e3).toFixed(2) + "K";
-    } else {
-      return value;
-    }
-  }
-
+function CryptoTableRow({ name, image, symbol, price, marketCap, volume, change, klineData }: CryptoTableRowProps) {
+  const up = change > 0;
   return (
     <motion.tr
-      // initial={{ opacity: 0, y: 20 }}
-      // animate={{ opacity: 1, y: 0 }}
-      whileHover={{ backgroundColor: "rgba(255, 255, 255, 0.05)" }}
-      className="border-b border-neutral-800 p-3 group font-medium text-lg hover:rounded-xl transition-all cursor-pointer"
-      onClick={() =>
-        (window.location.href = `/trade/${symbol.toUpperCase()}_USDC`)
-      }
+      whileHover={{ backgroundColor: "rgba(255,255,255,0.025)" }}
+      className="cursor-pointer transition-colors border-b border-white/[0.05] group"
+      onClick={() => (window.location.href = `/trade/${symbol.toUpperCase()}_USDC`)}
     >
-      <td className="py-4 pl-2 flex items-center first:rounded-l-xl last:rounded-r-xl">
-        <motion.div 
-          whileHover={{ scale: 1.1 }}
-          className="bg-neutral-700 rounded-full mr-5"
-        >
-          <Image
-            src={image}
-            alt={symbol}
-            width={54}
-            height={54}
-            className="rounded-full"
-          />
-        </motion.div>
-        <motion.div
-          initial={{ x: -20 }}
-          animate={{ x: 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          <div>{name}</div>
-          <div className="text-neutral-400 text-sm">{symbol.toUpperCase()}</div>
-        </motion.div>
+      {/* Name */}
+      <td className="px-5 py-3.5">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-full overflow-hidden ring-1 ring-white/10 bg-white/[0.04] shrink-0">
+            <Image src={image} alt={symbol} width={32} height={32} className="w-full h-full object-cover" />
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-white">{name}</p>
+            <p className="text-[10px] font-medium uppercase text-white/30">{symbol}</p>
+          </div>
+        </div>
       </td>
-      <motion.td 
-        className="text-right py-4"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.1 }}
-      >
-        ${price}
-      </motion.td>
-      <motion.td 
-        className="text-right py-4"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.2 }}
-      >
-        ${formatNumber(marketCap)}
-      </motion.td>
-      <motion.td 
-        className="text-right py-4"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3 }}
-      >
-        ${formatNumber(volume)}
-      </motion.td>
-      <motion.td
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.4 }}
-        className={`text-right py-4 ${
-          change > 0 ? "text-green-500" : "text-red-500"
-        }`}
-      >
-        {change} %
-      </motion.td>
-      <motion.td 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.5 }}
-        className="text-left px-4 text-green-600 flex justify-end items-center last:rounded-r-xl"
-      >
-        <CryptoLineChart
-          data={klineData ?? []}
-          color={change > 0 ? "#34D399" : "#DC2626"}
-        />
-      </motion.td>
+      {/* Price */}
+      <td className="px-5 py-3.5">
+        <span className="font-mono text-sm text-white tabular-nums">
+          ${price.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+        </span>
+      </td>
+      {/* Market cap */}
+      <td className="px-5 py-3.5 text-right">
+        <span className="font-mono text-sm text-white/55 tabular-nums">${formatNumber(marketCap)}</span>
+      </td>
+      {/* Volume */}
+      <td className="px-5 py-3.5 text-right">
+        <span className="font-mono text-sm text-white/55 tabular-nums">${formatNumber(volume)}</span>
+      </td>
+      {/* Change */}
+      <td className="px-5 py-3.5 text-right">
+        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-mono font-semibold ${
+          up
+            ? "text-[#22c55e] bg-[#22c55e]/10 ring-1 ring-[#22c55e]/20"
+            : "text-[#ef4444] bg-[#ef4444]/10 ring-1 ring-[#ef4444]/20"
+        }`}>
+          {up ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
+          {up ? "+" : ""}{change?.toFixed(2)}%
+        </span>
+      </td>
+      {/* Sparkline */}
+      <td className="px-5 py-3.5 flex justify-end items-center">
+        <CryptoLineChart data={klineData ?? []} color={up ? "#22c55e" : "#ef4444"} />
+      </td>
     </motion.tr>
   );
 }
 
-const carouselItems = [
-  {
-    src: "/backpack-smoke copy.webp",
-    title: "US Election Prediction Market",
-    description: "Predict the outcome by trading the outcome tokens.",
-    buttons: [{ text: "Manage Referrals", link: "#" }],
-  },
-  {
-    src: "/trumpharris copy.webp",
-    title: "Another Market",
-    description: "Trade the outcome tokens for another market.",
-    buttons: [
-      { text: "Trade TRUMPWIN", link: "#" },
-      { text: "Trade KAMALAWIN", link: "#" },
-    ],
-  },
-  {
-    src: "/home-banner copy.webp",
-    title: "Yet Another Market",
-    description: "Trade the outcome tokens for yet another market.",
-    buttons: [{ text: "Trade Now", link: "#" }],
-  },
-];
+// ── SPARKLINE ─────────────────────────────────────────────────────────────────
 
-function Carousel() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [direction, setDirection] = useState<number>(0);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      handleNext();
-    }, 7000);
-    return () => clearInterval(timer);
-  }, [currentIndex]);
-
-  const handlePrev = () => {
-    setDirection(-1);
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? carouselItems.length - 1 : prevIndex - 1
-    );
-  };
-
-  const handleNext = () => {
-    setDirection(1);
-    setCurrentIndex((prevIndex) =>
-      prevIndex === carouselItems.length - 1 ? 0 : prevIndex + 1
-    );
-  };
-
-  const slideVariants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? "100%" : "-100%",
-      opacity: 0,
-      scale: 0.8,
-    }),
-    center: {
-      x: 0,
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 0.5,
-        ease: [0.4, 0.0, 0.2, 1],
-      },
-    },
-    exit: (direction: number) => ({
-      x: direction < 0 ? "100%" : "-100%",
-      opacity: 0,
-      scale: 0.8,
-      transition: {
-        duration: 0.5,
-      },
-    }),
-  };
-
-  const currentItem = carouselItems[currentIndex];
-
-  return (
-    <div className="relative bg-[#1c1c1c] rounded-xl overflow-hidden mb-6 pt-32">
-      <AnimatePresence initial={false} custom={direction}>
-        <motion.div
-          key={currentIndex}
-          className="absolute inset-0"
-          custom={direction}
-          variants={slideVariants}
-          initial="enter"
-          animate="center"
-          exit="exit"
-          transition={{
-            x: { type: "spring", stiffness: 300, damping: 30 },
-            opacity: { duration: 0.2 },
-          }}
-        >
-          <Image
-            src={currentItem.src}
-            alt="Background"
-            fill
-            className="opacity-70 object-cover"
-          />
-        </motion.div>
-      </AnimatePresence>
-
-      <motion.div
-        className="relative p-8"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-      >
-        <div className="flex justify-between items-center mb-4 px-2 md:px-4">
-          <motion.div
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            className="p-2"
-          >
-            <ChevronLeft
-              className="text-neutral-400 cursor-pointer w-6 h-6 md:w-8 md:h-8"
-              onClick={handlePrev}
-            />
-          </motion.div>
-          <motion.div
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            className="p-2"
-          >
-            <ChevronRight
-              className="text-neutral-400 cursor-pointer w-6 h-6 md:w-8 md:h-8"
-              onClick={handleNext}
-            />
-          </motion.div>
-        </div>
-
-        <motion.h1
-          className="text-4xl font-bold mb-2"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
-          {currentItem.title}
-        </motion.h1>
-
-        <motion.p
-          className="text-neutral-400 mb-4"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-        >
-          {currentItem.description}
-        </motion.p>
-
-        <div className="flex space-x-4">
-          {currentItem.buttons.map((button, index) => (
-            <motion.button
-              key={index}
-              className="bg-white tracking-normal font-semibold text-black px-6 py-2 rounded-lg"
-              whileHover={{ scale: 1.05, backgroundColor: "#f0f0f0" }}
-              whileTap={{ scale: 0.95 }}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 + index * 0.1 }}
-            >
-              {button.text}
-            </motion.button>
-          ))}
-        </div>
-
-        <div className="flex justify-center mt-4 space-x-2">
-          {carouselItems.map((_, index) => (
-            <motion.div
-              key={index}
-              className={`w-2 h-2 rounded-full ${
-                index === currentIndex ? "bg-white" : "bg-neutral-600"
-              }`}
-              initial={false}
-              animate={{
-                scale: index === currentIndex ? 1.2 : 1,
-              }}
-              transition={{ duration: 0.2 }}
-            />
-          ))}
-        </div>
-      </motion.div>
-    </div>
-  );
-}
-
-//-----------------
-
-const formatData = (data: LineCryptoDataPoint[]) => {
-  return data.map((point) => ({
+const formatData = (data: LineCryptoDataPoint[]) =>
+  data.map((point) => ({
     time: (new Date(point.end).getTime() / 1000) as UTCTimestamp,
     value: parseFloat(point.close),
   }));
-};
 
-const CryptoLineChart = ({ data, color }: any) => {
+const CryptoLineChart = ({ data, color }: { data: LineCryptoDataPoint[]; color: string }) => {
   const chartContainerRef = useRef(null);
   const chartRef = useRef<IChartApi | null>(null);
-
   const formattedData = useMemo(() => formatData(data), [data]);
 
   useEffect(() => {
     if (!chartContainerRef.current) return;
-
     const chart = createChart(chartContainerRef.current, {
-      height: 30,
-      layout: {
-        background: { type: ColorType.Solid, color: "transparent" },
-        textColor: "#14161f",
-      },
-      watermark: {
-        visible: false,
-      },
-      rightPriceScale: {
-        visible: false,
-      },
-      timeScale: {
-        visible: false,
-        borderVisible: false,
-      },
-      grid: {
-        horzLines: { visible: false },
-        vertLines: { visible: false },
-      },
-      crosshair: {
-        vertLine: { visible: false },
-        horzLine: { visible: false },
-        // interaction: {
-        //   hover: false,
-        //   touch: false,
-        // },
-      },
+      height: 36,
+      layout: { background: { type: ColorType.Solid, color: "transparent" }, textColor: "transparent" },
+      watermark: { visible: false },
+      rightPriceScale: { visible: false },
+      timeScale: { visible: false, borderVisible: false },
+      grid: { horzLines: { visible: false }, vertLines: { visible: false } },
+      crosshair: { vertLine: { visible: false }, horzLine: { visible: false } },
       handleScroll: false,
       handleScale: false,
-      // priceScale: {
-      //   borderColor: 'transparent', // Set the border color to transparent
-      // },
     });
-
-    chart.priceScale("right").applyOptions({
-      borderVisible: false,
-    });
-
-    const lineSeries = chart.addLineSeries({
-      color: color,
-      lineWidth: 2,
-      lastValueVisible: false, // Hide the value at the end of the line
-      priceLineVisible: false, // Hide the price line
-    });
-
+    chart.priceScale("right").applyOptions({ borderVisible: false });
+    const lineSeries = chart.addLineSeries({ color, lineWidth: 2, lastValueVisible: false, priceLineVisible: false });
     lineSeries.setData(formattedData);
-
     chartRef.current = chart;
-
-    return () => {
-      chart.remove();
-    };
+    return () => chart.remove();
   }, [formattedData, color]);
 
-  if (!data)
-    return (
-      <div className="w-40 bg-[#1E1E1E]">
-        <div />
-      </div>
-    );
-
-  return (
-    <div className="w-28 bg-transparent">
-      <div ref={chartContainerRef} />
-    </div>
-  );
+  if (!data) return <div className="w-28" />;
+  return <div className="w-28 bg-transparent" ref={chartContainerRef} />;
 };

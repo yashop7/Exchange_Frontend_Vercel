@@ -80,7 +80,9 @@ const config: Config = {
   			sm: 'calc(var(--radius) - 4px)'
   		},
 		  fontFamily:{
-			  inter: ["Inter", "sans-serif"],
+			  inter:  ["Inter", "sans-serif"],
+			  sans:   ["var(--font-sans)", "system-ui", "sans-serif"],
+			  mono:   ["var(--font-mono)", "monospace"],
 		  }
   	}
   },

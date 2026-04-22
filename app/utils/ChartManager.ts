@@ -54,13 +54,28 @@ export class ChartManager {
       layout: {
         background: {
           type: ColorType.Solid,
-          color: layout.background,
+          color: "#000000",
         },
-        textColor: "white",
+        textColor: "rgba(255,255,255,0.35)",
+        fontSize: 11,
+      },
+      timeScale: {
+        borderColor: "rgba(255,255,255,0.08)",
+        timeVisible: true,
+        secondsVisible: false,
+      },
+      rightPriceScale: {
+        borderColor: "rgba(255,255,255,0.08)",
       },
     });
     this.chart = chart;
-    this.candleSeries = chart.addCandlestickSeries({ upColor: '#02c176', downColor: '#ff4747', borderVisible: false, wickUpColor: '#02c176', wickDownColor: '#ef5350' });
+    this.candleSeries = chart.addCandlestickSeries({
+      upColor: "#22c55e",
+      downColor: "#ef4444",
+      borderVisible: false,
+      wickUpColor: "#22c55e",
+      wickDownColor: "#ef4444",
+    });
 
     this.candleSeries.setData(
       initialData.map((data) => ({

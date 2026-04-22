@@ -1,7 +1,7 @@
 import { Ticker } from "./types";
 
-export const BP_BASE_URL = "wss://ws.backpack.exchange/";
-export const BASE_URL = "wss://exchangewsrailway-production.up.railway.app/";
+export const BP_BASE_URL = process.env.NEXT_PUBLIC_BP_WS_BASE_URL!;
+export const BASE_URL = process.env.NEXT_PUBLIC_WS_BASE_URL!;
 
 export class SignalingManager {
   private ws: WebSocket | null = null;
@@ -10,7 +10,6 @@ export class SignalingManager {
   private callbacks: any = {};
   private id: number;
   private initialized: boolean = false;
-  private market: string | undefined;
 
   private constructor() {
     this.bufferedMessages = [];
@@ -31,7 +30,8 @@ export class SignalingManager {
     if (this.ws) {
       this.ws.close();
     }
-    this.market = market;
+    this.initialized = false;
+    this.bufferedMessages = [];
     if (market === "TATA_INR") {
       this.ws = new WebSocket(BASE_URL);
     } else {
