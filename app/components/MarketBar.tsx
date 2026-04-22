@@ -17,7 +17,7 @@ export const MarketBar = ({ market }: { market: string }) => {
       settokenImage(image);
     }
     fetchImage();
-  }, []);
+  }, [market]);
 
   useEffect(() => {
     getTicker(market).then(setTicker);

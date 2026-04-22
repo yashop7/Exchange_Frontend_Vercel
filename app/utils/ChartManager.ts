@@ -42,6 +42,7 @@ export class ChartManager {
         visible: true,
         ticksVisible: true,
         entireTextOnly: true,
+        borderColor: "rgba(255,255,255,0.08)",
       },
       grid: {
         horzLines: {
@@ -63,9 +64,6 @@ export class ChartManager {
         borderColor: "rgba(255,255,255,0.08)",
         timeVisible: true,
         secondsVisible: false,
-      },
-      rightPriceScale: {
-        borderColor: "rgba(255,255,255,0.08)",
       },
     });
     this.chart = chart;

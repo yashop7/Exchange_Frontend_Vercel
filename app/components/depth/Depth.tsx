@@ -59,8 +59,10 @@ const sortedAsks = asks ? [...asks].sort((a, b) => parseFloat(a[0]) - parseFloat
     instance.registerCallback(
       "trade",
       (data: any) => {
-        setPriceUp((prev) => parseFloat(data.price) >= parseFloat(price || data.price));
-        setPrice(data.price);
+        setPrice((prev) => {
+          setPriceUp(parseFloat(data.price) >= parseFloat(prev || data.price));
+          return data.price;
+        });
         setTrade((prev) => {
           const entry: [string, string] = [String(data.price), String(data.quantity)];
           return prev ? [entry, ...prev].slice(0, 30) : [entry];
