@@ -1,11 +1,22 @@
 const ROWS = 14;
 
-const G = 'rgb(0,194,120)';
+const G       = 'rgb(0,194,120)';
 const G_DEPTH = 'rgba(0,194,120,0.10)';
 const G_QTY   = 'rgba(0,194,120,0.22)';
 
+const DEMO_BIDS: [string, string][] = [
+  ["2402.50", "4.8072"], ["2402.38", "1.2353"], ["2402.27", "0.0009"],
+  ["2402.19", "4.8069"], ["2402.11", "4.8049"], ["2402.02", "0.3729"],
+  ["2401.96", "9.1560"], ["2401.91", "4.8072"], ["2401.83", "2.2700"],
+  ["2401.75", "1.7335"], ["2401.60", "0.5243"], ["2401.48", "4.8072"],
+  ["2401.37", "0.6000"], ["2401.22", "2.2350"],
+];
+
 export const BidTable = ({ bids }: { bids: [string, string][] }) => {
-  const relevant = bids.slice(0, ROWS);
+  const source = bids.length > 0 ? bids : DEMO_BIDS;
+  const isDemoMode = bids.length === 0;
+
+  const relevant = source.slice(0, ROWS);
   let cumulative = 0;
   const rows: [string, string, number][] = relevant.map(
     ([p, q]) => [p, q, (cumulative += Number(q))]
@@ -13,7 +24,7 @@ export const BidTable = ({ bids }: { bids: [string, string][] }) => {
   const maxTotal = cumulative;
 
   return (
-    <div className="overflow-hidden" style={{ height: `${ROWS * 22}px` }}>
+    <div className={`overflow-hidden ${isDemoMode ? "opacity-30 pointer-events-none select-none" : ""}`} style={{ height: `${ROWS * 22}px` }}>
       {rows.map(([price, quantity, total]) => (
         <BidRow key={price} price={price} quantity={quantity} total={total} maxTotal={maxTotal} />
       ))}
